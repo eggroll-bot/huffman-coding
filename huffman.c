@@ -6,7 +6,6 @@
 #include "priority_queue.h"
 #include "stack.h"
 
-#include <assert.h>
 #include <stdint.h>
 
 // Description:
@@ -55,9 +54,7 @@ Node *build_tree( uint64_t hist[ static ALPHABET ] ) {
 void build_codes( Node *root, Code table[ static ALPHABET ] ) {
 	static Code code = { 0 };
 
-	assert( root );
-
-	if ( !root->left && !root->right ) { // Node is a leaf.
+	if ( !root->left || !root->right ) { // Node is a leaf.
 		table[ root->symbol ] = code;
 	} else { // Node is an interior node.
 		uint8_t popped_bit;
