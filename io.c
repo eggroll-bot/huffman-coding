@@ -142,17 +142,13 @@ uint64_t write_code( int outfile, Code *c ) {
 // Returns:
 // uint64_t - Bytes written to file.
 uint64_t flush_codes( int outfile ) {
-	if ( write_bit_top == 0 ) {
-		return 0;
-	}
-
 	uint64_t bytes_written = 0;
 
 	if ( write_bit_top % 8 == 0 ) { // Write buffer not on byte boundary.
 		write_bytes( outfile, write_bit_buffer, write_bit_top / 8 );
 		bytes_written += write_bit_top / 8;
 	} else { // Write buffer on byte boundary.
-		write_bit_buffer[ write_bit_top / 8 ] &= ( ( 1 << ( write_bit_top % 8 ) ) - 1 );
+		write_bit_buffer[ write_bit_top / 8 ] &= ( ( 1 << ( write_bit_top % 8 ) ) - 1 ); // Zero out garbage bits in the last byte.
 		write_bytes( outfile, write_bit_buffer, write_bit_top / 8 + 1 );
 		bytes_written += write_bit_top / 8 + 1;
 	}
