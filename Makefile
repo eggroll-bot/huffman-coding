@@ -6,8 +6,8 @@ SOURCEFILES_2 = huffman_decode.c
 OBJECTFILES_2 = huffman_decode.o
 OUTPUT_2 = huffman_decode
 
-SOURCEFILES_DEPENDENCIES_1_2 = code.c huffman.c io.c node.c priority_queue.c stack.c
-OBJECTFILES_DEPENDENCIES_1_2 = code.o huffman.o io.o node.o priority_queue.o stack.o
+SOURCEFILES_DEPENDENCIES_1_2 = code.c huffman.c io.c node.c priority_queue.c raw_file_header.c stack.c
+OBJECTFILES_DEPENDENCIES_1_2 = code.o huffman.o io.o node.o priority_queue.o raw_file_header.o stack.o
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
