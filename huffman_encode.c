@@ -2,6 +2,7 @@
 #include "file_header.h"
 #include "huffman.h"
 #include "io.h"
+#include "raw_file_header.h"
 
 #include <fcntl.h>
 #include <getopt.h>
@@ -278,8 +279,9 @@ int main( int argc, char **argv ) {
 	output_header.permissions = input_file_stats.st_mode;
 	output_header.tree_size = 3 * unique_symbols - 1;
 	output_header.original_file_size = input_file_stats.st_size;
-	write_bytes( output_file, ( uint8_t * ) &output_header, sizeof( output_header ) ); // Write header.
-	compressed_size += sizeof( output_header );
+	RawFileHeader output_raw_header = raw_file_header_create( output_header );
+	write_bytes( output_file, ( uint8_t * ) &output_raw_header, sizeof( output_raw_header ) ); // Write raw file header.
+	compressed_size += sizeof( output_raw_header );
 	write_tree_to_outfile( huffman_tree, &compressed_size );
 	compressed_size += write_codes_for_symbols( huffman_code_table );
 
@@ -297,4 +299,3 @@ int main( int argc, char **argv ) {
 }
 
 // TO-DO: Change adding 0 and 255 to the histogram to something more optimal.
-// TO-DO: Account for endianness.

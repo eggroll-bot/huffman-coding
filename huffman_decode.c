@@ -2,6 +2,7 @@
 #include "file_header.h"
 #include "huffman.h"
 #include "io.h"
+#include "raw_file_header.h"
 
 #include <assert.h>
 #include <fcntl.h>
@@ -168,9 +169,10 @@ int main( int argc, char **argv ) {
 	}
 
 	uint64_t compressed_size = 0;
-	FileHeader header = { 0 };
-	read_bytes( input_file, ( uint8_t * ) &header, sizeof( header ) );
-	compressed_size += sizeof( header );
+	RawFileHeader raw_header = { 0 };
+	read_bytes( input_file, ( uint8_t * ) &raw_header, sizeof( raw_header ) );
+	compressed_size += sizeof( raw_header );
+	FileHeader header = file_header_create( raw_header );
 
 	if ( header.magic_number != MAGIC ) {
 		fprintf( stderr, "Error: unable to read file header. Invalid input file or input file corrupted.\n" );
