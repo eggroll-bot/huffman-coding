@@ -1,0 +1,31 @@
+---
+BasedOnStyle: WebKit
+---
+Language: Cpp
+AlignConsecutiveMacros: true
+AlignEscapedNewlines: Right
+AlignOperands: true
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+ColumnLimit: 200
+IncludeBlocks: Regroup
+IndentCaseLabels: false
+IndentWrappedFunctionNames: true
+PointerAlignment: Right
+ReflowComments: false
+SortIncludes: true
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: false
+SpaceBeforeAssignmentOperators: true
+SpaceAfterControlStatementKeyword: true
+SpaceInEmptyParentheses: true
+SpacesInCStyleCastParentheses: true
+SpacesInParentheses: true
+SpacesInSquareBrackets: true
+BreakBeforeBraces: Attach
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+---

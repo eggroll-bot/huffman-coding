@@ -1,0 +1,5 @@
+.vscode
+*.o
+*.out
+huffman_encode
+huffman_decode
