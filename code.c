@@ -6,18 +6,6 @@
 #include <stdio.h>
 
 // Description:
-// Checks the size of a code.
-//
-// Parameters:
-// Code *c - The code to check.
-//
-// Returns:
-// uint32_t - The size of the code.
-uint32_t code_size( Code *c ) {
-	return c->top;
-}
-
-// Description:
 // Checks if a code is empty.
 //
 // Parameters:
@@ -39,19 +27,6 @@ bool code_empty( Code *c ) {
 // bool - Whether the code is full.
 bool code_full( Code *c ) {
 	return c->top == MAX_CODE_SIZE * 8;
-}
-
-// Description:
-// Returns a bit from a code.
-//
-// Parameters:
-// Code *c - The code to check.
-// uint32_t pos - The position of the bit to get.
-//
-// Returns:
-// uint8_t - The bit.
-uint8_t code_get_bit( Code *c, uint32_t pos ) {
-	return 1 & ( c->bytes[ pos / 8 ] >> ( pos % 8 ) );
 }
 
 // Description:

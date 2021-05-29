@@ -11,13 +11,9 @@ typedef struct Code {
 	uint8_t bytes[ MAX_CODE_SIZE ];
 } Code;
 
-uint32_t code_size( Code *c );
-
 bool code_empty( Code *c );
 
 bool code_full( Code *c );
-
-uint8_t code_get_bit( Code *c, uint32_t pos );
 
 bool code_push_bit( Code *c, uint8_t bit );
 

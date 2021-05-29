@@ -112,8 +112,8 @@ bool read_bit( int infile, uint8_t *bit ) {
 uint64_t write_code( int outfile, Code *c ) {
 	uint64_t bytes_written = 0;
 
-	for ( uint32_t i = 0; i < code_size( c ); i++ ) {
-		uint8_t bit = code_get_bit( c, i );
+	for ( uint32_t i = 0; i < c->top; i++ ) {
+		uint8_t bit = 1 & ( c->bytes[ i / 8 ] >> ( i % 8 ) );
 
 		if ( bit == 0 ) { // Clear bit.
 			write_bit_buffer[ write_bit_top / 8 ] &= ~( 1 << ( write_bit_top % 8 ) );
