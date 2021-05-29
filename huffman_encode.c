@@ -70,7 +70,7 @@ static bool process_input_output_files( char *input_file_name, char *output_file
 		return false;
 	}
 
-	if ( output_file_name && ( output_file = open( output_file_name, O_WRONLY | O_CREAT | O_TRUNC ) ) <= 0 ) {
+	if ( output_file_name && ( output_file = open( output_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0600 ) ) <= 0 ) {
 		fprintf( stderr, "Error: failed to open outfile.\n" );
 
 		return false;
