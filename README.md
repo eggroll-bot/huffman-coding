@@ -21,7 +21,7 @@ To see the program usage text, run `./huffman_encode -h` and `./huffman_decode -
 
 For the encoder and decoder program, use the `-h` flag to print the program usage and help, the `-v` flag to print decoding statistics to stderr, the `-i` flag with an argument to specify an input file, and the `-o` flag with an argument to specify an output file.
 
-By default, the encoder and decoder programs will use stdin for the input and stdout for the output. In error cases, stderr will be used.
+By default, the encoder and decoder programs will use stdin for the input and stdout for the output. In error cases and for statistics printing, stderr will be used.
 
 ## Known issues
 
