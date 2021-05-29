@@ -6,14 +6,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-int read_bytes( int infile, uint8_t *buf, int nbytes );
+uint32_t read_bytes( int infile, uint8_t *buf, uint32_t nbytes );
 
-int write_bytes( int outfile, uint8_t *buf, int nbytes );
+uint32_t write_bytes( int outfile, uint8_t *buf, uint32_t nbytes );
 
 bool read_bit( int infile, uint8_t *bit );
 
-void write_code( int outfile, Code *c );
+uint64_t write_code( int outfile, Code *c );
 
-void flush_codes( int outfile );
+uint64_t flush_codes( int outfile );
 
 #endif

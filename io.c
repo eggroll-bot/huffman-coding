@@ -15,17 +15,17 @@ static uint32_t write_bit_top = 0;
 // Parameters:
 // int infile - The input file.
 // uint8_t *buf - The buffer to read to.
-// int nbytes - The max number of bytes to read.
+// uint32_t nbytes - The max number of bytes to read.
 //
 // Returns:
-// int - How many bytes were read.
-int read_bytes( int infile, uint8_t *buf, int nbytes ) {
+// uint32_t - How many bytes were read.
+uint32_t read_bytes( int infile, uint8_t *buf, uint32_t nbytes ) {
 	if ( nbytes == 0 ) {
 		return 0;
 	}
 
-	int bytes_read = 0;
-	int bytes_read_current_round = 0;
+	uint32_t bytes_read = 0;
+	uint32_t bytes_read_current_round = 0;
 
 	while ( ( bytes_read_current_round = read( infile, buf + bytes_read, nbytes - bytes_read ) ) > 0 ) {
 		bytes_read += bytes_read_current_round;
@@ -45,17 +45,17 @@ int read_bytes( int infile, uint8_t *buf, int nbytes ) {
 // Parameters:
 // int outfile - The output file.
 // uint8_t *buf - The buffer to write to.
-// int nbytes - The max number of bytes to write.
+// uint32_t nbytes - The max number of bytes to write.
 //
 // Returns:
-// int - How many bytes were written.
-int write_bytes( int outfile, uint8_t *buf, int nbytes ) {
+// uint32_t - How many bytes were written.
+uint32_t write_bytes( int outfile, uint8_t *buf, uint32_t nbytes ) {
 	if ( nbytes == 0 ) {
 		return 0;
 	}
 
-	int bytes_wrote = 0;
-	int bytes_wrote_current_round = 0;
+	uint32_t bytes_wrote = 0;
+	uint32_t bytes_wrote_current_round = 0;
 
 	while ( ( bytes_wrote_current_round = write( outfile, buf + bytes_wrote, nbytes - bytes_wrote ) ) > 0 ) {
 		bytes_wrote += bytes_wrote_current_round;
@@ -108,8 +108,10 @@ bool read_bit( int infile, uint8_t *bit ) {
 // Code *c - The code to write.
 //
 // Returns:
-// Nothing.
-void write_code( int outfile, Code *c ) {
+// uint64_t - Bytes actually written to file.
+uint64_t write_code( int outfile, Code *c ) {
+	uint64_t bytes_written = 0;
+
 	for ( uint32_t i = 0; i < code_size( c ); i++ ) {
 		uint8_t bit = code_get_bit( c, i );
 
@@ -123,9 +125,12 @@ void write_code( int outfile, Code *c ) {
 
 		if ( write_bit_top == BLOCK * 8 ) { // Write bit buffer full.
 			write_bytes( outfile, write_bit_buffer, BLOCK );
+			bytes_written += BLOCK;
 			write_bit_top = 0;
 		}
 	}
+
+	return bytes_written;
 }
 
 // Description:
@@ -135,18 +140,24 @@ void write_code( int outfile, Code *c ) {
 // int outfile - The output file.
 //
 // Returns:
-// Nothing.
-void flush_codes( int outfile ) {
+// uint64_t - Bytes written to file.
+uint64_t flush_codes( int outfile ) {
 	if ( write_bit_top == 0 ) {
-		return;
+		return 0;
 	}
+
+	uint64_t bytes_written = 0;
 
 	if ( write_bit_top % 8 == 0 ) { // Write buffer not on byte boundary.
 		write_bytes( outfile, write_bit_buffer, write_bit_top / 8 );
+		bytes_written += write_bit_top / 8;
 	} else { // Write buffer on byte boundary.
 		write_bit_buffer[ write_bit_top / 8 ] &= ( ( 1 << ( write_bit_top % 8 ) ) - 1 );
 		write_bytes( outfile, write_bit_buffer, write_bit_top / 8 + 1 );
+		bytes_written += write_bit_top / 8 + 1;
 	}
 
 	write_bit_top = 0;
+
+	return bytes_written;
 }
