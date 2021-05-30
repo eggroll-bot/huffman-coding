@@ -12,7 +12,7 @@ RawFileHeader raw_file_header_create( FileHeader file_header ) {
 	raw_file_header.magic_number[ 2 ] = file_header.magic_number >> 16;
 	raw_file_header.magic_number[ 3 ] = file_header.magic_number >> 24;
 	raw_file_header.tree_size[ 0 ] = file_header.tree_size;
-	raw_file_header.tree_size[ 0 ] = file_header.tree_size;
+	raw_file_header.tree_size[ 1 ] = file_header.tree_size >> 8;
 	raw_file_header.original_file_size[ 0 ] = file_header.original_file_size;
 	raw_file_header.original_file_size[ 1 ] = file_header.original_file_size >> 8;
 	raw_file_header.original_file_size[ 2 ] = file_header.original_file_size >> 16;
