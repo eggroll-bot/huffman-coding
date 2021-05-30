@@ -256,14 +256,13 @@ int main( int argc, char **argv ) {
 	struct stat input_file_stats;
 	fstat( input_file, &input_file_stats );
 
-	if ( output_file_name ) { // Write perms to output_file, if it exists.
+	if ( output_file_name ) { // Set permissions of output_file to that of input_file, if it exists (0600 if input file isn't seekable).
 		fchmod( output_file, input_file_stats.st_mode );
 	}
 
 	uint64_t compressed_size = 0;
 	FileHeader output_header = { 0 };
 	output_header.magic_number = MAGIC;
-	output_header.permissions = input_file_stats.st_mode;
 
 	if ( unique_symbols != 0 ) {
 		output_header.tree_size = 3 * unique_symbols - 1;
@@ -288,5 +287,3 @@ int main( int argc, char **argv ) {
 
 	return 0;
 }
-
-// TO-DO: Remove file permissions from file header and raw file header. Make decoder take permissions from input file instead.

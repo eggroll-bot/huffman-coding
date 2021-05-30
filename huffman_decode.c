@@ -187,8 +187,14 @@ int main( int argc, char **argv ) {
 		return 1;
 	}
 
-	if ( output_file_name ) { // Write perms to output_file, if it exists.
-		fchmod( output_file, header.permissions );
+	if ( output_file_name ) { // Write permissions to output_file, if it exists.
+		if ( lseek( input_file, 0, SEEK_CUR ) == -1 ) { // Input file is not seekable.
+			fchmod( output_file, 0600 );
+		} else { // Input file is seekable.
+			struct stat input_file_stats;
+			fstat( input_file, &input_file_stats );
+			fchmod( output_file, input_file_stats.st_mode );
+		}
 	}
 
 	uint8_t tree_dump[ header.tree_size ];

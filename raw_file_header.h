@@ -7,7 +7,6 @@
 
 typedef struct RawFileHeader {
 	uint8_t magic_number[ 4 ];
-	uint8_t permissions[ 2 ];
 	uint8_t tree_size[ 2 ];
 	uint8_t original_file_size[ 8 ];
 } RawFileHeader;
