@@ -28,9 +28,9 @@ static int output_file = -1;
 // Nothing.
 static void print_help( char *program_path ) {
 	fprintf( stderr,
-		"SYNOPSIS\n   A Huffman decoder implementation.\n\nUSAGE\n   %s [-hv] [-i infile] [-o outfile]\n\nOPTIONS\n   -h             Prints the program help text.\n   -v             Prints "
-		"compression statistics to stderr.\n   -i infile      Input file to decompress.\n   -o outfile     File to output the decompressed data to.\n",
-		program_path );
+	    "SYNOPSIS\n   A Huffman decoder implementation.\n\nUSAGE\n   %s [-hv] [-i infile] [-o outfile]\n\nOPTIONS\n   -h             Prints the program help text.\n   -v             Prints "
+	    "compression statistics to stderr.\n   -i infile      Input file to decompress.\n   -o outfile     File to output the decompressed data to.\n",
+	    program_path );
 }
 
 // Description:
