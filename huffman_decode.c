@@ -4,7 +4,6 @@
 #include "io.h"
 #include "raw_file_header.h"
 
-#include <assert.h>
 #include <fcntl.h>
 #include <getopt.h>
 #include <inttypes.h>

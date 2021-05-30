@@ -2,8 +2,8 @@
 
 #include "defines.h"
 
+#include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 
 // Description:
 // Checks if a code is empty.
