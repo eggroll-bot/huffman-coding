@@ -134,19 +134,6 @@ static uint32_t generate_histogram_and_temp_input_file( uint64_t histogram[ stat
 		}
 	}
 
-	// Prepare for incrementing the count of element 0 and 255.
-	if ( histogram[ 0 ] == 0 ) {
-		unique_symbols++;
-	}
-
-	if ( histogram[ 255 ] == 0 ) {
-		unique_symbols++;
-	}
-
-	// Increment the count of element 0 and 255, so there's at least two elements in the histogram.
-	histogram[ 0 ]++;
-	histogram[ 255 ]++;
-
 	if ( temp_file_fd != -1 ) { // Set input file to temp file if input_file is not seekable.
 		close( input_file );
 		input_file = temp_file_fd;
@@ -274,10 +261,14 @@ int main( int argc, char **argv ) {
 	}
 
 	uint64_t compressed_size = 0;
-	FileHeader output_header;
+	FileHeader output_header = { 0 };
 	output_header.magic_number = MAGIC;
 	output_header.permissions = input_file_stats.st_mode;
-	output_header.tree_size = 3 * unique_symbols - 1;
+
+	if ( unique_symbols != 0 ) {
+		output_header.tree_size = 3 * unique_symbols - 1;
+	}
+
 	output_header.original_file_size = input_file_stats.st_size;
 	RawFileHeader output_raw_header = raw_file_header_create( output_header );
 	write_bytes( output_file, ( uint8_t * ) &output_raw_header, sizeof( output_raw_header ) ); // Write raw file header.
@@ -298,4 +289,4 @@ int main( int argc, char **argv ) {
 	return 0;
 }
 
-// TO-DO: Change adding 0 and 255 to the histogram to something more optimal.
+// TO-DO: Remove file permissions from file header and raw file header. Make decoder take permissions from input file instead.

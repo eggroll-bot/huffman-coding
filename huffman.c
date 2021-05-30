@@ -7,6 +7,7 @@
 #include "stack.h"
 
 #include <stdint.h>
+#include <stdlib.h>
 
 // Description:
 // Builds a Huffman tree from a histogram.
@@ -35,7 +36,7 @@ Node *build_tree( uint64_t hist[ static ALPHABET ] ) {
 		enqueue( huffman_pq, node_join( left_child, right_child ) );
 	}
 
-	Node *root_node;
+	Node *root_node = NULL;
 	dequeue( huffman_pq, &root_node ); // Dequeue root node.
 	pq_delete( &huffman_pq );
 
@@ -54,7 +55,11 @@ Node *build_tree( uint64_t hist[ static ALPHABET ] ) {
 void build_codes( Node *root, Code table[ static ALPHABET ] ) {
 	static Code code = { 0 };
 
-	if ( !root->left || !root->right ) { // Node is a leaf.
+	if ( !root ) { // Empty Huffman tree.
+		return;
+	}
+
+	if ( !root->left && !root->right ) { // Node is a leaf.
 		table[ root->symbol ] = code;
 	} else { // Node is an interior node.
 		uint8_t popped_bit;
@@ -92,7 +97,7 @@ Node *rebuild_tree( uint16_t nbytes, uint8_t tree[ static nbytes ] ) {
 		}
 	}
 
-	Node *root_node;
+	Node *root_node = NULL;
 	stack_pop( huffman_stack, &root_node );
 	stack_delete( &huffman_stack );
 

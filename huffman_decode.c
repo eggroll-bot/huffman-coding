@@ -94,23 +94,24 @@ static bool write_decoded_codes( Node *huffman_tree, uint64_t file_size, uint64_
 	Node *current_node = huffman_tree;
 	uint8_t write_buffer[ BLOCK ] = { 0 };
 	uint32_t write_buffer_top = 0;
+	uint8_t bit;
 
 	while ( symbols_written < file_size ) {
-		uint8_t bit;
+		if ( huffman_tree->left || huffman_tree->right ) { // Root node is not a leaf. (Root node is a leaf when there is only one unique symbol.)
+			if ( !read_bit( input_file, &bit ) ) {
+				return false;
+			}
 
-		if ( !read_bit( input_file, &bit ) ) {
-			return false;
-		}
+			// Walk down the correct node.
+			if ( bit == 0 ) {
+				current_node = current_node->left;
+			} else { // Bit is a 1.
+				current_node = current_node->right;
+			}
 
-		// Walk down the correct node.
-		if ( bit == 0 ) {
-			current_node = current_node->left;
-		} else { // Bit is a 1.
-			current_node = current_node->right;
-		}
-
-		if ( !current_node ) {
-			return false;
+			if ( !current_node ) {
+				return false;
+			}
 		}
 
 		if ( !current_node->left && !current_node->right ) { // Node is a leaf.
