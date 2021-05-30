@@ -90,6 +90,8 @@ static bool process_input_output_files( char *input_file_name, char *output_file
 // Returns:
 // bool - Whether the codes were able to be decoded.
 static bool write_decoded_codes( Node *huffman_tree, uint64_t file_size, uint64_t *compressed_size ) {
+	uint64_t bytes_read = 0;
+	uint32_t bits_read_in_byte = 0; // Use this instead of counting bits in a uint64_t to prevent overflow (even though it practically shouldn't happen).
 	uint64_t symbols_written = 0;
 	Node *current_node = huffman_tree;
 	uint8_t write_buffer[ BLOCK ] = { 0 };
@@ -100,6 +102,14 @@ static bool write_decoded_codes( Node *huffman_tree, uint64_t file_size, uint64_
 		if ( huffman_tree->left || huffman_tree->right ) { // Root node is not a leaf. (Root node is a leaf when there is only one unique symbol.)
 			if ( !read_bit( input_file, &bit ) ) {
 				return false;
+			}
+
+			// Increment bits_read_in_byte and bytes_read as needed.
+			bits_read_in_byte++;
+
+			if ( bits_read_in_byte == 8 ) {
+				bytes_read++;
+				bits_read_in_byte = 0;
 			}
 
 			// Walk down the correct node.
@@ -120,7 +130,6 @@ static bool write_decoded_codes( Node *huffman_tree, uint64_t file_size, uint64_
 
 			if ( write_buffer_top == BLOCK ) { // Write buffer is full.
 				write_bytes( output_file, write_buffer, BLOCK );
-				*compressed_size += BLOCK;
 				write_buffer_top = 0;
 			}
 
@@ -130,7 +139,7 @@ static bool write_decoded_codes( Node *huffman_tree, uint64_t file_size, uint64_
 	}
 
 	write_bytes( output_file, write_buffer, write_buffer_top ); // Flush write buffer.
-	*compressed_size += write_buffer_top;
+	*compressed_size += bits_read_in_byte == 0 ? bytes_read : bytes_read + 1; // Add total bytes read for codes.
 
 	return true;
 }
